@@ -1,0 +1,16 @@
+# Azure App Service deployment configuration
+resource:
+  # Lokasi Azure
+  location: "Southeast Asia"
+  
+  # Python runtime
+  runtime: "python|3.11"
+  
+  # Startup command
+  startup_command: "gunicorn --bind 0.0.0.0:$PORT app:app"
+  
+  # Environment variables
+  environment_variables:
+    - FLASK_ENV: "production"
+    - PYTHONPATH: "."
+    - PORT: "8000"
