@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Hasil Rekomendasi</h1>
+    <p>Menampilkan 3 rekomendasi toko terbaik untuk membeli <strong>{{ barang }}</strong> dari <strong>{{ rumah }}</strong>.</p>
+
+    <div class="results-container mobile-full-width">
+        {% if rekomendasi %}
+            {% for nama_toko, data in rekomendasi %}
+            <div class="result-item result-item-card clickable-card"
+                 onclick="toggleRoute(this)"
+                 data-toko-info='{{ data.toko_info_for_js|tojson|safe }}'> {# MENGGUNAKAN toko_info_for_js #}
+                <span class="result-item-rank">{{ loop.index }}</span>
+                <div class="result-item-info">
+                    <h3>{{ nama_toko }}</h3>
+                    <p>
+                        <span class="info-label">Skor Rekomendasi:</span>
+                        <span class="info-value">{{ data.skor }}</span>
+                    </p>
+                    <p>
+                        <span class="info-label">Alasan:</span>
+                        <span>{{ data.alasan }}</span>
+                    </p>
+                    <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 12px 0;">
+                    <p>
+                        <span class="info-label">Jarak:</span>
+                        <span>{{ data.jarak }} langkah</span>
+                    </p>
+                    <p>
+                        <span class="info-label">Rating Toko:</span>
+                        <span>{{ data.rating }} &#9733;</span>
+                    </p>
+                     <p>
+                        <span class="info-label">Stok Tersedia:</span>
+                        <span>{{ data.stok }} unit</span>
+                    </p>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="result-item-card">
+                <h3>Hasil Tidak Ditemukan</h3>
+                <p>Maaf, tidak ada toko yang menjual <strong>{{ barang }}</strong> saat ini.</p>
+            </div>
+        {% endif %}
+    </div>
+
+    <div id="route-visual-wrapper" class="visual-wrapper-hidden">
+        <hr class="separator-line">
+        <h3>Visualisasi Rute</h3>
+        <canvas id="mapCanvas" 
+            data-grid='{{ grid|tojson|safe }}''
+            data-rumah-asal='{{ rumah_asal|tojson|safe }}'
+            data-map-image="{{ map_image_url }}">
+        </canvas>
+    </div>
+
+    <a href="{{ url_for('home') }}" class="button-kembali">Kembali ke Pencarian</a>
+{% endblock %}
